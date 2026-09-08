@@ -4,6 +4,6 @@
 Призначення: оформлення замовлень і підрахунок сум. 
 ## Запуск 
 dotnet build 
-dotnet run --project src/src/Cli 
+dotnet run --project src/Cli 
 ## Середовище 
 .NET SDK 10.0, Windows 11 x64 / Ubuntu 24.04 x64 
