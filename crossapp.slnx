@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/src/">
+    <Project Path="src/src/Cli/Cli.csproj" />
+  </Folder>
+</Solution>
