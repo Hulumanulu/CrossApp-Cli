@@ -11,33 +11,33 @@ dotnet run --project src/Cli
 
 ## Лабораторна робота 2
 
-### Структура проєкту
-CrossApp/
-  CrossApp.slnx
-  README.md
-  .gitignore
-  src/
-    Core/
-      Core.csproj
-      EnvironmentInfo.cs
-    Cli/
-      Cli.csproj
-      Program.cs
+## Структура проєкту
+CrossApp/ <br>
+  CrossApp.slnx <br>
+  README.md <br>
+  .gitignore <br>
+  src/ <br>
+    Core/ <br>
+      Core.csproj <br>
+      EnvironmentInfo.cs <br>
+    Cli/ <br>
+      Cli.csproj <br>
+      Program.cs <br>
 
-### Команди збірки, запуску та публікації
-# Збірка рішення
+## Команди збірки, запуску та публікації
+### Збірка рішення
 dotnet build
 
-# Запуск CLI проєкту
+### Запуск CLI проєкту
 dotnet run --project src/Cli
 
-# Публікація (Self-contained)
+### Публікація (Self-contained)
 dotnet publish src/Cli -c Release -r win-x64 --self-contained true -f net10.0
 
-# Публікація (Framework-dependent)
+### Публікація (Framework-dependent)
 dotnet publish src/Cli -c Release -r win-x64 --self-contained false -f net10.0
 
-### Порівняння режимів публікації
+## Порівняння режимів публікації
 
 | RID | Режим | Розмір publish | Потрібен встановлений runtime |
 | :--- | :--- | :--- | :--- |
