@@ -9,23 +9,25 @@ dotnet run --project src/Cli
 .NET SDK 10.0, Windows 11 x64
 ---
 
-## Лабораторна робота 2
+# Лабораторна робота 2
 
 ## Структура проєкту
-CrossApp/ <br>
-  CrossApp.slnx <br>
-  README.md <br>
-  .gitignore <br>
-  src/ <br>
-    Core/ <br>
-      Core.csproj <br>
-      EnvironmentInfo.cs <br>
-    Cli/ <br>
-      Cli.csproj <br>
-      Program.cs <br>
+```text
+CrossApp/
+  CrossApp.slnx
+  README.md
+  .gitignore
+  src/
+    Core/
+      Core.csproj
+      EnvironmentInfo.cs
+    Cli/
+      Cli.csproj
+      Program.cs
+```
 
 ## Команди збірки, запуску та публікації
-### Збірка рішення
+### Збірка
 dotnet build
 
 ### Запуск CLI проєкту
