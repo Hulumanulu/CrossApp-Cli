@@ -1,29 +1,60 @@
-﻿using Core.Dto;
-using Core.Import;
+﻿using Core.Domain;
 
-string path = args.Length > 0 ? args[0] : Path.Combine("data", "sample.csv");
+Console.WriteLine("=== СЦЕНАРІЙ 1: Успішна робота з доменною моделлю ===");
 
-if (!File.Exists(path))
+Order order = Order.Create("O-2026-001", "CUST-777");
+Console.WriteLine($"Створено: {order}");
+
+order.AddLine("P-101", "Ноутбук Lenovo IdeaPad", 18500.50m, 1);
+order.AddLine("P-102", "Миша безпровідна Logitech", 650.00m, 2);
+
+Console.WriteLine("\nДодано товари:");
+foreach (var line in order.Lines)
 {
-    Console.WriteLine($"Файл не знайдено: {Path.GetFullPath(path)}");
-    return 1;
+    Console.WriteLine($"  * {line}");
 }
 
-ImportResult<OrderDto> result = OrderCsvImporter.Load(path);
+Console.WriteLine($"\nЗагальна вартість: {order.TotalPrice:F2} грн");
 
-Console.WriteLine($"Завантажено замовлень: {result.Items.Count}");
-foreach (OrderDto order in result.Items.Take(5))
-{
-    Console.WriteLine($" {order.Id,-6} {order.Name,-26} {order.Price,8:F2} грн");
-}
+order.Confirm();
+Console.WriteLine($"\nПісля підтвердження: {order}");
 
-if (result.Errors.Count > 0)
+Console.WriteLine("\n" + new string('=', 60) + "\n");
+
+Console.WriteLine("=== СЦЕНАРІЙ 2: Перевірка захисту інваріантів (помилки) ===");
+
+TryDo("Спроба створити замовлення з порожнім ID", () => Order.Create("", "CUST-100"));
+
+TryDo("Спроба додати товар з від'ємною ціною", () => {
+    Order temp = Order.Create("O-TEST", "CUST-100");
+    temp.AddLine("P-01", "Монітор", -500.00m, 1);
+});
+
+TryDo("Спроба додати товар з нульовою кількістю", () => {
+    Order temp = Order.Create("O-TEST", "CUST-100");
+    temp.AddLine("P-01", "Монітор", 5000.00m, 0);
+});
+
+TryDo("Спроба підтвердити порожнє замовлення", () => {
+    Order emptyOrder = Order.Create("O-EMPTY", "CUST-100");
+    emptyOrder.Confirm();
+});
+
+TryDo("Спроба додати новий товар у вже підтверджене замовлення", () => {
+    order.AddLine("P-103", "Клавіатура", 1200.00m, 1);
+});
+
+// Допоміжна локальна функція для чистого виводу повідомлень про помилки
+static void TryDo(string title, Action action)
 {
-    Console.WriteLine($"\nПропущено рядків: {result.Errors.Count}");
-    foreach (string e in result.Errors)
+    try
     {
-        Console.WriteLine($" ! {e}");
+        action();
+        Console.WriteLine($" ! {title}: ВИНОК НЕ СПРАЦЮВАВ (Інваріант відсутній!)");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($" ✓ {title}:");
+        Console.WriteLine($"   [{ex.GetType().Name}] {ex.Message}");
     }
 }
-
-return 0;
