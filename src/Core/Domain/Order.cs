@@ -52,20 +52,26 @@ public sealed class Order
         IsConfirmed = true;
     }
 
-    // Зведення сутності у формат OrderDto з лаби 3
-    public OrderDto ToDto()
-    {
-        return new OrderDto(Id, CustomerId, TotalPrice);
-    }
+    public OrderDto ToDto() => new(
+        Id, CustomerId, TotalPrice,
+        IsConfirmed: IsConfirmed,
+        Lines: _lines.Select(l => new OrderLineDto(l.ProductId, l.Name, l.Price, l.Quantity)).ToList());
 
-    // Відновлення сутності з OrderDto
     public static Order FromDto(OrderDto dto)
     {
         Order order = Create(dto.Id, dto.Name);
-        if (dto.Price > 0)
+
+        if (dto.Lines is { Count: > 0 })
+        {
+            foreach (var l in dto.Lines)
+                order.AddLine(l.ProductId, l.Name, l.Price, l.Quantity);
+        }
+        else if (dto.Price > 0)
         {
             order.AddLine("P-AUTO", "Позиція за замовчуванням", dto.Price, 1);
         }
+
+        if (dto.IsConfirmed) order.Confirm();
         return order;
     }
 
